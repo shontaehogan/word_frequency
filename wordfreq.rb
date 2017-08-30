@@ -40,11 +40,16 @@ end
 
 
   def print_report
+    # top10 = top_words(10)
     top10 = @words.sort_by { |word, count| count }.reverse.take(10).to_h
+
     top10.each { |word_and_count|
+    # result = top10.each do |key, value|
       stars = "*" * word_and_count[1]
-      puts "#{word_and_count[0]} | #{word_and_count[1]} #{stars}"}
+      puts "#{word_and_count[0]} | #{word_and_count[1]} #{stars}"
+    }
   end
+end
 end
 
 if __FILE__ == $0
@@ -53,7 +58,12 @@ if __FILE__ == $0
     full_filename = File.absolute_path(filename)
     if File.exists?(full_filename)
       wf = Wordfreq.new(full_filename)
+
+
+      wf.top_words(8)
+      wf.frequencies
       wf.print_report
+
     else
       puts "#{filename} does not exist!"
     end
