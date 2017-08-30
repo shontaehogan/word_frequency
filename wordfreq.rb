@@ -37,23 +37,27 @@ end
   def top_words(number)
     @words.sort_by { |word, count| count }.reverse.take(5)
   end
-  
 
-#   def print_report
-#   end
-# end
-#
-# if __FILE__ == $0
-#   filename = ARGV[0]
-#   if filename
-#     full_filename = File.absolute_path(filename)
-#     if File.exists?(full_filename)
-#       wf = Wordfreq.new(full_filename)
-#       wf.print_report
-#     else
-#       puts "#{filename} does not exist!"
-#     end
-#   else
-#     puts "Please give a filename as an argument."
-#   end
+
+  def print_report
+    top10 = @words.sort_by { |word, count| count }.reverse.take(10).to_h
+    top10.each { |word_and_count|
+      stars = "*" * word_and_count[1]
+      puts "#{word_and_count[0]} | #{word_and_count[1]} #{stars}"}
+  end
+end
+
+if __FILE__ == $0
+  filename = ARGV[0]
+  if filename
+    full_filename = File.absolute_path(filename)
+    if File.exists?(full_filename)
+      wf = Wordfreq.new(full_filename)
+      wf.print_report
+    else
+      puts "#{filename} does not exist!"
+    end
+  else
+    puts "Please give a filename as an argument."
+  end
 end
