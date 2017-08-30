@@ -23,6 +23,9 @@ end
 
 
   def frequency(word)
+    freq_words = 0
+    @words.map {|line| freq_words += line.scan(/(\s#{word}\s)+/).length}
+    freq_words
     if @words.has_key?(word)
       return frequencies[word]
     else
@@ -31,16 +34,39 @@ end
 end
 
   def frequencies
-    @words
+    result = Hash.new()
+
+    #Put every word in file into array
+    array_words = []
+    @words.each do |line|
+      line.scan(/(\w+)+/).map {|word| array_words.push(word[0].to_s)}
+  end
+    #remove stop words
+    array_words -= STOP_WORDS
+
+    array_words.each do |word|
+      if(result[word].nil?)
+        result[word] = 1
+      else
+        result[word] = result[word].to_i + 1
+      end
+    end
+
+    result
+
   end
 
+
   def top_words(number)
+    result = frequencies.sort_by {|k, v| v}.reverse
+    result.take(number)
     @words.sort_by { |word, count| count }.reverse.take(5)
   end
 
 
   def print_report
-    # top10 = top_words(10)
+    
+    top10 = top_words(10)
     top10 = @words.sort_by { |word, count| count }.reverse.take(10).to_h
 
     top10.each { |word_and_count|
@@ -49,7 +75,6 @@ end
       puts "#{word_and_count[0]} | #{word_and_count[1]} #{stars}"
     }
   end
-end
 end
 
 if __FILE__ == $0
